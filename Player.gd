@@ -32,7 +32,10 @@ func _process(delta):
 		velocity.y += 1
 	if Input.is_action_pressed("move_up"):
 		velocity.y -= 1
-	
+	#Update the position of the player at each tick. 
+	position += velocity * delta
+	position.x = clamp(position.x, 0, screen_size.x)
+	position.y = clamp(position.y, 0, screen_size.y)
 	
 	#If the squid is moving animate.
 	if velocity.length() > 0:
@@ -53,10 +56,7 @@ func _process(delta):
 		$AnimatedSprite.flip_v = velocity.y > 0
 		
 		
-	#Update the position of the player at each tick. 
-	position += velocity * delta
-	position.x = clamp(position.x, 0, screen_size.x)
-	position.y = clamp(position.y, 0, screen_size.y)
+	
 
 
 
