@@ -1,5 +1,7 @@
 extends Area2D
 
+signal hit
+#Will affect the main menu Scene Later
 
 
 export var speed = 400 
@@ -16,6 +18,9 @@ var screen_size # Size of the game window.
 
 func _ready(): #Do this when the scene is loaded. 
 	screen_size = get_viewport_rect().size
+	hide()
+	
+	
 #Do this at every frame the game loops with.
 func _process(delta):
 	var velocity = Vector2.ZERO # The player's movement vector.
@@ -52,3 +57,17 @@ func _process(delta):
 	position += velocity * delta
 	position.x = clamp(position.x, 0, screen_size.x)
 	position.y = clamp(position.y, 0, screen_size.y)
+
+
+
+func _on_Player_body_entered(body):
+	hide() # Player disappears after being hit.
+	emit_signal("hit")
+	# Must be deferred as we can't change physics properties on a physics callback.
+	$CollisionShape2D.set_deferred("disabled", true)
+	
+	
+func start(pos):
+	position = pos
+	show()
+	$CollisionShape2D.disabled = false
